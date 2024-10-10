@@ -1,7 +1,6 @@
 <template>
   <a-row id="globalHeader" align="center" :wrap="false">
     <a-col flex="auto">
-      <!-- :default-selected-keys="['1']" -->
       <a-menu
         mode="horizontal"
         :selected-keys="selectedKeys"
@@ -13,7 +12,7 @@
           disabled
         >
           <div class="title-bar">
-            <img class="logo" src="../assets/logo.png" alt="" />
+            <img class="logo" src="../assets/logo.png" />
             <div class="title">CCOJ</div>
           </div>
         </a-menu-item>
@@ -31,18 +30,15 @@
 </template>
 
 <script setup lang="ts">
-import { routes } from "@/router/routes";
+import { routes } from "../router/routes";
 import { useRoute, useRouter } from "vue-router";
-import { computed, ref, useSlots } from "vue";
+import { computed, ref } from "vue";
 import { useStore } from "vuex";
 import checkAccess from "@/access/checkAccess";
 import ACCESS_ENUM from "@/access/accessEnum";
 
 const router = useRouter();
 const store = useStore();
-
-// 获取路由信息
-// const route = useRoute();
 
 // 展示在菜单的路由数组
 const visibleRoutes = computed(() => {
@@ -63,37 +59,39 @@ const visibleRoutes = computed(() => {
 // 默认主页
 const selectedKeys = ref(["/"]);
 
-// 路由跳转时，更新选中的菜单项
+// 路由跳转后，更新选中的菜单项
 router.afterEach((to, from, failure) => {
   selectedKeys.value = [to.path];
 });
 
-const doMenuClick = (key: string) => {
-  router.push({
-    path: key,
-  });
-};
+console.log();
 
-console.log(store.state.user);
 setTimeout(() => {
   store.dispatch("user/getLoginUser", {
     userName: "西西",
     userRole: ACCESS_ENUM.ADMIN,
   });
 }, 3000);
+
+const doMenuClick = (key: string) => {
+  router.push({
+    path: key,
+  });
+};
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 .title-bar {
   display: flex;
   align-items: center;
 }
-.logo {
-  height: 48px;
-}
+
 .title {
   color: #444;
   margin-left: 16px;
+}
+
+.logo {
+  height: 48px;
 }
 </style>
